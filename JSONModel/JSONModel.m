@@ -466,8 +466,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
                     }
                 } else {
                     // 3.4) handle "all other" cases (if any)
-                    if (![jsonValue isEqual:[self valueForKey:property.name]])
-                        [self setValue:jsonValue forKey:property.name];
+                    [self setValue:jsonValue forKey:property.name];
                 }
             }
         }
