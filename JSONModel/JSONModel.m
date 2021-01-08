@@ -406,9 +406,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
                     }
 
                     //set the property value
-                    if (![jsonValue isEqual:[self valueForKey:property.name]]) {
-                        [self setValue:jsonValue forKey: property.name];
-                    }
+                    [self setValue:jsonValue forKey: property.name];
                     continue;
                 }
 
@@ -454,8 +452,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
                         id (*func)(id, SEL, id) = (void *)imp;
                         jsonValue = func(valueTransformer, selector, jsonValue);
 
-                        if (![jsonValue isEqual:[self valueForKey:property.name]])
-                            [self setValue:jsonValue forKey:property.name];
+                        [self setValue:jsonValue forKey:property.name];
                     } else {
                         if (err) {
                             NSString* msg = [NSString stringWithFormat:@"%@ type not supported for %@.%@", property.type, [self class], property.name];
