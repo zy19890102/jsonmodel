@@ -23,7 +23,7 @@ let package = Package(
             dependencies: [],
             path: "JSONModel",
             exclude: ["Info.plist"],
-            publicHeadersPath: ""
+            publicHeadersPath: "Public"
             ),
     ]
 )
