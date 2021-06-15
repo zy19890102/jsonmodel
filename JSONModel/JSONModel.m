@@ -429,8 +429,8 @@ static JSONKeyMapper* globalKeyMapper = nil;
 
                     //build a method selector for the property and json object classes
                     NSString* selectorName = [NSString stringWithFormat:@"%@From%@:",
-                                              (property.structName? property.structName : property.type), //target name
-                                              sourceClass]; //source name
+                                              (property.structName? property.structName : NSStringFromClass(property.type)), //target name
+                                              NSStringFromClass(sourceClass)]; //source name
                     SEL selector = NSSelectorFromString(selectorName);
 
                     //check for custom transformer
@@ -985,7 +985,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
             if (YES) {
 
                 //create selector from the property's class name
-                NSString* selectorName = [NSString stringWithFormat:@"%@From%@:", @"JSONObject", p.type?p.type:p.structName];
+                NSString* selectorName = [NSString stringWithFormat:@"%@From%@:", @"JSONObject", p.type?NSStringFromClass(p.type):p.structName];
                 SEL selector = NSSelectorFromString(selectorName);
 
                 BOOL foundCustomTransformer = NO;
@@ -1347,9 +1347,11 @@ static JSONKeyMapper* globalKeyMapper = nil;
 #pragma mark - NSCopying, NSCoding
 -(instancetype)copyWithZone:(NSZone *)zone
 {
-    return [NSKeyedUnarchiver unarchiveObjectWithData:
-        [NSKeyedArchiver archivedDataWithRootObject:self]
-     ];
+    NSError *archiveError;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:NO error:&archiveError];
+    
+    NSError *unarchiveError;
+    return [NSKeyedUnarchiver unarchivedObjectOfClass:[self class] fromData:data error:&unarchiveError];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)decoder
